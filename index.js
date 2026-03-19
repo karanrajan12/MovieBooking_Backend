@@ -4,6 +4,7 @@ import fs from 'fs';
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import movieRoutes from "./routes/route.movie.js";
+import theatreRoutes from "./routes/route.theatre.js";
 dotenv.config();
 
 const app=express();
@@ -23,6 +24,7 @@ const dbConnect=async()=>{
 dbConnect();
 
 movieRoutes(app);
+theatreRoutes(app);
 
 app.listen(port,()=>{
     console.log(fs.readFileSync('./banner.txt','utf-8'));

@@ -6,7 +6,7 @@ const movieRoutes=(app)=>{
     app.delete('/moviebooking/api/v1/movies/:id',moviecontrollers.deleteController);
     app.put('/moviebooking/api/v1/movies/:id',moviecontrollers.updateController);
     app.patch('/moviebooking/api/v1/movies/:id',moviecontrollers.updateController);
-    app.get('/moviebooking/api/v1/movies',moviecontrollers.fetchController)
+    app.get('/moviebooking/api/v1/movies',moviecontrollers.fetchController);
 }
 
 export default movieRoutes;
