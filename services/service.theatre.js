@@ -69,4 +69,41 @@ const getAllTheatres=async(data)=>{
         throw error;
     }
 }
-export default {postTheatre,getTheatre,putTheatre,getAllTheatres};
+
+const deleteTheatre = async (id) => {
+    try {
+        const theatre = await theatreModel.findByIdAndDelete(id);
+        if(!theatre) {
+            return {
+                err: "No record of a theatre found for the given id",
+                code: 404
+            }
+        }
+        return theatre;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+const addMoviesinTheatre=(async(theatreId,movieId,insert)=>{
+    const theatre=await theatreModel.findById(theatreId);
+    if(!theatre){
+        return{
+            err:"No Such Id Found for Given ID",
+            statuscode:404
+        }
+    }
+    if(insert){
+        movieId.forEach((id)=>{
+            theatre.movies.push(id)
+        })
+    }else{
+        theatre.movies = theatre.movies.filter(
+            (availableId) => !movieId.includes(availableId.toString())
+        );
+    }
+    await theatre.save();
+    return theatre.populate('movies');
+})
+export default {postTheatre,getTheatre,putTheatre,getAllTheatres,deleteTheatre,addMoviesinTheatre};

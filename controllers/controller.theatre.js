@@ -60,4 +60,37 @@ const getAllTheatreController=async(req,res)=>{
         res.status(500).json(ERRresbody);
     }
 }
-export default {postController,getController,putController,getAllTheatreController};
+
+const deleteController = async (req, res) => {
+    try {
+        const response = await theatreService.deleteTheatre(req.params.id);
+        if(response.err) {
+            ERRresbody.err = response.err;
+            return res.status(response.code).json(ERRresbody);
+        }
+        SUCresbody.data = response;
+        SUCresbody.message = "Successfully deleted the given theatre";
+        return res.status(200).json(SUCresbody);
+    } catch (error) {
+        ERRresbody.err = error;
+        return res.status(500).json(ERRresbody);
+    }
+}
+
+const addMoviesinTheatreController=(async(req,res)=>{
+    try{
+        const response=await theatreService.addMoviesinTheatre(req.params.id,req.body.movieIds,req.body.insert);
+        if(response.err) {
+            ERRresbody.err = response.err;
+            return res.status(response.code).json(ERRresbody);
+        }
+        SUCresbody.data = response;
+        SUCresbody.message = "Successfully updated movies in the theatre";
+        return res.status(200).json(SUCresbody);
+    }catch(error){
+        console.log(error);
+        ERRresbody.err = error;
+        return res.status(500).json(ERRresbody);
+    }
+})
+export default {postController,getController,putController,getAllTheatreController,deleteController,addMoviesinTheatreController};
