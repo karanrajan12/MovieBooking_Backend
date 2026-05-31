@@ -8,6 +8,8 @@ const theatreRoutes=(app)=>{
     app.get('/moviebooking/api/v1/theatre',theatreControllers.getAllTheatreController);
     app.delete('/moviebooking/api/v1/theatre/:id',theatreControllers.deleteController);
     app.patch('/moviebooking/api/v1/theatre/:id/movies',theatremiddlewares.checkAddMoviesinTheatre,theatreControllers.addMoviesinTheatreController);
+    app.get('/moviebooking/api/v1/theatre/:theatreId/movies/:movieId',theatreControllers.checkMovieController);
+    app.patch('/moviebooking/api/v1/theatres/:id/movies', theatremiddlewares.validateUpdateMoviesRequest, theatreControllers.updateMoviesController);
 }
 
 export default theatreRoutes;

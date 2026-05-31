@@ -35,5 +35,23 @@ const checkAddMoviesinTheatre=((req,res,next)=>{
     }
     next();
 })
-
-export default {checkCreateTheatreReq,checkAddMoviesinTheatre};
+const validateUpdateMoviesRequest = async (req, res, next) => {
+    if(req.body.insert == undefined) {
+        badresBody.message = "The insert parameter is missing in the request";
+        return res.status(400).json(badresBody);
+    }
+    if(!req.body.movieIds) {
+        badresBody.message = "No movies present in the request to be updated in theatre";
+        return res.status(400).json(badresBody);
+    }
+    if(!(req.body.movieIds instanceof Array)) {
+        badresBody.message = "Expected array of movies but found something else";
+        return res.status(400).json(badresBody);
+    }
+    if(req.body.movieIds.length === 0) {
+        badresBody.message = "No movies present in the array provided";
+        return res.status(400).json(badresBody);
+    }
+    next();
+}
+export default {checkCreateTheatreReq,checkAddMoviesinTheatre,validateUpdateMoviesRequest};

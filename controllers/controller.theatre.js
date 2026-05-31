@@ -93,4 +93,40 @@ const addMoviesinTheatreController=(async(req,res)=>{
         return res.status(500).json(ERRresbody);
     }
 })
-export default {postController,getController,putController,getAllTheatreController,deleteController,addMoviesinTheatreController};
+const checkMovieController = async (req, res) => {
+    try {
+        const response = await theatreService.checkMovieInATheatre(req.params.theatreId,req.params.movieId);
+        if(response.err) {
+            ERRresbody.err = response.err;
+            return res.status(response.status).json(ERRresbody);
+        }
+        SUCresbody.data = response;
+        SUCresbody.message = "Successfully checked if movie is present in the theatre";
+        return res.status(200).json(SUCresbody);
+    } catch (error) {
+        ERRresbody.err = error;
+        return res.status(500).json(ERRresbody);
+    }
+}
+const updateMoviesController = async (req, res) => {
+    try {
+        const response = await theatreService.updateMoviesInTheatres(
+            req.params.id,
+            req.body.movieIds,
+            req.body.insert
+        );
+        if(response.err) {
+            ERRresbody.err = response.err;
+            return res.status(response.code).json(ERRresbody);
+        }
+        SUCresbody.data = response;
+        SUCresbody.message = "Successfully updated movies in the theatre";
+        return res.status(200).json(SUCresbody);
+    } catch (error) {
+        console.log(error);
+        ERRresbody.err = error;
+        return res.status(500).json(ERRresbody);
+    }
+}
+
+export default {postController,getController,putController,getAllTheatreController,deleteController,addMoviesinTheatreController,checkMovieController,updateMoviesController};

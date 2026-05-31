@@ -106,4 +106,48 @@ const addMoviesinTheatre=(async(theatreId,movieId,insert)=>{
     await theatre.save();
     return theatre.populate('movies');
 })
-export default {postTheatre,getTheatre,putTheatre,getAllTheatres,deleteTheatre,addMoviesinTheatre};
+const checkMovieInATheatre = async (theatreId, movieId) => {
+    try {
+        let response = await theatreModel.findById(theatreId);
+        if(!response) {
+            return {
+                err: "No such theatre found for the given id",
+                code: 404
+            }
+        }
+        return response.movies.indexOf(movieId) != -1;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+const updateMoviesInTheatres = async (theatreId, movieIds, insert) => {
+    try {
+        let theatre;
+        if (insert) {
+            theatre = await theatreModel.findByIdAndUpdate(
+                {_id: theatreId},
+                {$addToSet: {movies: {$each: movieIds}}},
+                {new: true}
+            );
+        } else {
+            theatre = await theatreModel.findByIdAndUpdate(
+                {_id: theatreId},
+                {$pull: {movies: {$in: movieIds}}},
+                {new: true}
+            );
+        }
+
+        return theatreModel.populate('movies');
+    } catch (error) {
+        if(error.name === 'TypeError') {
+            return {
+                code: 404,
+                err: 'No theatre found for the given id'
+            }
+        }
+        console.log("Error is", error);
+        throw error;
+    }
+}
+export default {postTheatre,getTheatre,putTheatre,getAllTheatres,deleteTheatre,addMoviesinTheatre,checkMovieInATheatre,updateMoviesInTheatres};
