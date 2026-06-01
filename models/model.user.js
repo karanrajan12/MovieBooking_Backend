@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const userSchema=new mongoose.Schema({
-    user:{
+    userName:{
         required:true,
         type:String,
         unique:true,
@@ -30,7 +30,7 @@ const userSchema=new mongoose.Schema({
         required:true,
         default:"APPROVED"
     }
-    },{timestamps});
+    },{timestamps:true});
 
 const userModel=mongoose.model('Users',userSchema);
 
