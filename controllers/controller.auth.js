@@ -8,9 +8,12 @@ const signup=async (req,res)=>{
         SUCresbody.message="Successfully Registered an User";
         return res.status(201).json(SUCresbody);
     }catch(err){
+        if(err.err){
+            ERRresbody.error=err.err;
+            return res.status(err.code).json(ERRresbody);
+        }
         ERRresbody.error=err;
         res.status(500).json(ERRresbody);
-        console.log(err);
     }
 }
 
