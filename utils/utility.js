@@ -1,0 +1,20 @@
+export const USER_STATUS={
+    approved:"APPROVED",
+    pending:"PENDING",
+    rejected:"REJECTED"
+};
+
+export const USER_TYPE={
+    customer:"CUSTOMER",
+    admin:"ADMIN",
+    client:"CLIENT"
+};
+
+export const STATUS_CODES = {
+    OK: 200,
+    INTERNAL_SERVER_ERROR: 500,
+    CREATED: 201,
+    UNAUTHORISED: 401,
+    NOT_FOUND: 404,
+    BAD_REQUEST: 400
+};

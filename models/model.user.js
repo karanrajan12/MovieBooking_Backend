@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-
+import {USER_TYPE,USER_STATUS} from "../utils/utility.js";
 const userSchema=new mongoose.Schema({
     userName:{
         required:true,
@@ -24,12 +24,20 @@ const userSchema=new mongoose.Schema({
     userType:{
         type:String,
         required:true,
-        default:"CUSTOMER"
+        enum:{
+            values:[USER_TYPE.customer,USER_TYPE.admin,USER_TYPE.client],
+            message:"Invalid User Type"
+        },
+        default:USER_TYPE.customer
     },
     userStatus:{
         type:String,
         required:true,
-        default:"APPROVED"
+        enum:{
+            values:[USER_STATUS.approved,USER_STATUS.pending,USER_STATUS.rejected],
+            message:"Invalid User Status"
+        },
+        default:USER_STATUS.approved
     }
     },{timestamps:true});
 
