@@ -40,7 +40,7 @@ const signin=async (req,res)=>{
         return res.status(200).json(SUCresbody);
     }catch(error){
         if(error.err) {
-            ERRresbody.err = error.err;
+            ERRresbody.error = error.err;
             return res.status(error.code).json(ERRresbody);
         }
         console.log(error);

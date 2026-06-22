@@ -1,4 +1,5 @@
 import ERRresbody from "../utils/errorresponseBody.js";
+import errorresponseBody from "../utils/errorresponseBody.js";
 
 const checkUserCreateRequest=async(req,res,next)=>{
     if(!req.body.userName){
@@ -16,4 +17,15 @@ const checkUserCreateRequest=async(req,res,next)=>{
     next();
 }
 
-export default checkUserCreateRequest;
+const checkUserSignin=async(req,res,next)=>{
+    if(!req.body.email){
+        ERRresbody.error="E-Mail is Not Provided";
+        return res.status(400).json(ERRresbody);
+    }
+    if(!req.body.password){
+        ERRresbody.error="Password is Not Provided";
+        return res.status(400).json(ERRresbody);
+    }
+    next();
+}
+export default {checkUserCreateRequest,checkUserSignin};
