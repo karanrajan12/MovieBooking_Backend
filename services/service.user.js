@@ -45,7 +45,23 @@ const checkUserEmail=async(email)=>{
     }
 }
 
+const getUserId=async (id)=>{
+    try{
+        const response=await userModel.findById(id);
+        if(!response){
+            throw{
+                err:"No User Found with the Given Id",
+                code:404
+            }
+        }
+        return response;
+    }catch(error){
+        throw error;
+    }
+}
+
 export default {
     createUser,
-    checkUserEmail
+    checkUserEmail,
+    getUserId
 };

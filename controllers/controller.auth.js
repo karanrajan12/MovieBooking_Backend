@@ -28,7 +28,6 @@ const signin=async (req,res)=>{
         const token=jwt.sign(
             {id:response.id,email:response.email},
             process.env.JWT_AUTH_KEY,
-            {expiresIn:"1h"}
         );
         SUCresbody.message = "Successfully logged in";
         SUCresbody.data = {
@@ -37,6 +36,7 @@ const signin=async (req,res)=>{
             status: response.userStatus,
             token: token
         };
+        console.log(req.headers);
         return res.status(200).json(SUCresbody);
     }catch(error){
         if(error.err) {
@@ -44,6 +44,7 @@ const signin=async (req,res)=>{
             return res.status(error.code).json(ERRresbody);
         }
         console.log(error);
+
         ERRresbody.err = error;
         return res.status(500).json(ERRresbody);
     }
