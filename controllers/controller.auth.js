@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import userServices from '../services/service.user.js';
 import ERRresbody from "../utils/errorresponseBody.js";
 import SUCresbody from "../utils/successresponseBody.js";
+import userModel from "../models/model.user.js";
 const signup=async (req,res)=>{
     try{
         const response=await userServices.createUser(req.body);
@@ -50,7 +51,32 @@ const signin=async (req,res)=>{
     }
 }
 
+const resetPassword=async(req,res)=>{
+    try{
+        const response=await userServices.getUserId(req.user);
+        const checkOldPassword=await response.isValidPassword(req.body.oldPassword);
+        if(!checkOldPassword){
+            throw{
+                err:"Old Password is Wrong",
+                code:403
+            }
+        }
+        response.password=req.body.newPassword;
+        await response.save();
+        SUCresbody.data=response;
+        SUCresbody.message="Succesfully Updated the Password";
+        return res.status(201).json(SUCresbody);
+    }catch(error){
+        if(error.err){
+            ERRresbody.error=err;
+            return res.status(error.code).json(ERRresbody);
+        }
+        ERRresbody.error=error;
+        return res.status(500).json(ERRresbody);
+    }
+}
 export default {
     signup,
-    signin
+    signin,
+    resetPassword
 };
