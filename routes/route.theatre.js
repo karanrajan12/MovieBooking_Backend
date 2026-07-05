@@ -9,13 +9,31 @@ const theatreRoutes=(app)=>{
         theatreControllers.postController);
 
     app.get('/moviebooking/api/v1/theatre/:id',theatreControllers.getController);
-    app.put('/moviebooking/api/v1/theatre/:id',theatreControllers.putController);
-    app.patch('/moviebooking/api/v1/theatre/:id',theatremiddlewares.checkCreateTheatreReq,theatreControllers.putController);
+    app.put('/moviebooking/api/v1/theatre/:id',
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdminOrClient,
+        theatreControllers.putController);
+    app.patch('/moviebooking/api/v1/theatre/:id',
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdminOrClient,
+        theatreControllers.putController);
     app.get('/moviebooking/api/v1/theatre',theatreControllers.getAllTheatreController);
-    app.delete('/moviebooking/api/v1/theatre/:id',authMiddlewares.checkAuthentication,theatreControllers.deleteController);
-    app.patch('/moviebooking/api/v1/theatre/:id/movies',theatremiddlewares.checkAddMoviesinTheatre,theatreControllers.addMoviesinTheatreController);
+    app.delete('/moviebooking/api/v1/theatre/:id',
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdminOrClient,
+        authMiddlewares.checkAuthentication,
+        theatreControllers.deleteController);
+    app.patch('/moviebooking/api/v1/theatre/:id/movies',
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdminOrClient,
+        theatremiddlewares.checkAddMoviesinTheatre,
+        theatreControllers.addMoviesinTheatreController);
     app.get('/moviebooking/api/v1/theatre/:theatreId/movies/:movieId',theatreControllers.checkMovieController);
-    app.patch('/moviebooking/api/v1/theatres/:id/movies', theatremiddlewares.validateUpdateMoviesRequest, theatreControllers.updateMoviesController);
+    app.patch('/moviebooking/api/v1/theatres/:id/movies',
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdminOrClient,
+        theatremiddlewares.validateUpdateMoviesRequest,
+        theatreControllers.updateMoviesController);
 }
 
 export default theatreRoutes;

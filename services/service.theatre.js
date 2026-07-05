@@ -26,16 +26,33 @@ const getTheatre=async(id)=>{
     }
 }
 
-const putTheatre=async(id,body)=>{
-    try{
-        const theatre =await theatreModel.findByIdAndUpdate(id,body);
-        return theatre
-    }catch(error){
-        if(error.name === 'CastError'){
-            return {err:"Movie Not found for the given Id So can't able to Update",statuscode:STATUS_CODES.NOT_FOUND};
+const putTheatre = async (id, body) => {
+    try {
+        const theatre = await theatreModel.findByIdAndUpdate(
+            id,
+            body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+        if (!theatre) {
+            return {
+                err: "No theatre found for the given id",
+                statuscode: STATUS_CODES.NOT_FOUND
+            };
         }
+        return theatre;
+    } catch (error) {
+        if (error.name === "CastError") {
+            return {
+                err: "Invalid theatre id",
+                statuscode: STATUS_CODES.BAD_REQUEST
+            };
+        }
+        throw error;
     }
-}
+};
 
 const getAllTheatres=async(data)=>{
     try{
@@ -73,18 +90,23 @@ const getAllTheatres=async(data)=>{
 const deleteTheatre = async (id) => {
     try {
         const theatre = await theatreModel.findByIdAndDelete(id);
-        if(!theatre) {
+        if (!theatre) {
             return {
-                err: "No record of a theatre found for the given id",
+                err: "No theatre found for the given id",
                 code: STATUS_CODES.NOT_FOUND
-            }
+            };
         }
         return theatre;
     } catch (error) {
-        console.log(error);
+        if (error.name === "CastError") {
+            return {
+                err: "Invalid theatre id",
+                code: STATUS_CODES.BAD_REQUEST
+            };
+        }
         throw error;
     }
-}
+};
 
 const addMoviesinTheatre=(async(theatreId,movieId,insert)=>{
     const theatre=await theatreModel.findById(theatreId);

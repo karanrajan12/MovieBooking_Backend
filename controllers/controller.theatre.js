@@ -65,6 +65,7 @@ const getAllTheatreController=async(req,res)=>{
 const deleteController = async (req, res) => {
     try {
         const response = await theatreService.deleteTheatre(req.params.id);
+        console.log(response);
         if(response.err) {
             ERRresbody.err = response.err;
             return res.status(response.code).json(ERRresbody);
