@@ -1,5 +1,5 @@
 import userModel from "../models/model.user.js";
-import {USER_TYPE,USER_STATUS} from "../utils/utility.js";
+import {USER_TYPE,USER_STATUS,STATUS_CODES} from "../utils/utility.js";
 
 
 const createUser=async (body)=>{
@@ -8,7 +8,7 @@ const createUser=async (body)=>{
             if(body.userStatus && body.userStatus != USER_STATUS.approved){
                 throw {
                     err: "We cannot set any other status for customer",
-                    code: 400
+                    code: STATUS_CODES.BAD_REQUEST
                 };
             }
         }
@@ -24,7 +24,7 @@ const createUser=async (body)=>{
                     error[key] = err.errors[key].message;
                 });
 
-                throw { err: error,code: 422 };
+                throw { err: error,code: STATUS_CODES.UNPROCESSABLE_ENTITY };
             }
             throw err;
         }
@@ -51,7 +51,7 @@ const getUserId=async (id)=>{
         if(!response){
             throw{
                 err:"No User Found with the Given Id",
-                code:404
+                code:STATUS_CODES.NOT_FOUND
             }
         }
         return response;
@@ -78,7 +78,7 @@ const updateUserRoleStatus=async(data,userId)=>{
         if(!response){
             throw{
                 err:"User not found for the given id",
-                code:404
+                code:STATUS_CODES.NOT_FOUND
             }
         }
         return response;
@@ -86,7 +86,7 @@ const updateUserRoleStatus=async(data,userId)=>{
         if(error.name==="ValidationError"){
             throw {
                 err:"The Properties does not validate the constraints",
-                code:404
+                code:STATUS_CODES.NOT_FOUND
             }
         }
         console.log(error);

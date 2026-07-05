@@ -1,5 +1,5 @@
 import theatreModel from "../models/model.theatre.js";
-
+import {STATUS_CODES} from "../utils/utility.js";
 const postTheatre=async(body)=>{
     try{
         const theatre=await theatreModel.create(body);
@@ -10,7 +10,7 @@ const postTheatre=async(body)=>{
             Object.keys(error.errors).forEach((key)=>{
                 err[key]=error.errors[key].message;
             })
-            return{err:err,statuscode:422};
+            return{err:err,statuscode:STATUS_CODES.UNPROCESSABLE_ENTITY};
         }
     }
 }
@@ -21,7 +21,7 @@ const getTheatre=async(id)=>{
         return response;
     }catch(error){
         if(error.name === 'CastError'){
-            return {err:"Movie Not found for the given Id",statuscode:404};
+            return {err:"Movie Not found for the given Id",statuscode:STATUS_CODES.NOT_FOUND};
         }
     }
 }
@@ -32,7 +32,7 @@ const putTheatre=async(id,body)=>{
         return theatre
     }catch(error){
         if(error.name === 'CastError'){
-            return {err:"Movie Not found for the given Id So can't able to Update",statuscode:404};
+            return {err:"Movie Not found for the given Id So can't able to Update",statuscode:STATUS_CODES.NOT_FOUND};
         }
     }
 }
@@ -76,7 +76,7 @@ const deleteTheatre = async (id) => {
         if(!theatre) {
             return {
                 err: "No record of a theatre found for the given id",
-                code: 404
+                code: STATUS_CODES.NOT_FOUND
             }
         }
         return theatre;
@@ -91,7 +91,7 @@ const addMoviesinTheatre=(async(theatreId,movieId,insert)=>{
     if(!theatre){
         return{
             err:"No Such Id Found for Given ID",
-            statuscode:404
+            statuscode:STATUS_CODES.NOT_FOUND
         }
     }
     if(insert){
@@ -112,7 +112,7 @@ const checkMovieInATheatre = async (theatreId, movieId) => {
         if(!response) {
             return {
                 err: "No such theatre found for the given id",
-                code: 404
+                code: STATUS_CODES.NOT_FOUND
             }
         }
         return response.movies.indexOf(movieId) != -1;
@@ -142,7 +142,7 @@ const updateMoviesInTheatres = async (theatreId, movieIds, insert) => {
     } catch (error) {
         if(error.name === 'TypeError') {
             return {
-                code: 404,
+                code: STATUS_CODES.NOT_FOUND,
                 err: 'No theatre found for the given id'
             }
         }

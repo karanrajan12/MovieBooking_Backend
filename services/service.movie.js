@@ -1,5 +1,5 @@
 import movieModel from "../models/model.movie.js";
-
+import {STATUS_CODES} from "../utils/utility.js";
 const postMovies=async(body)=>{
     try{
         const data=await movieModel.create(body);
@@ -12,7 +12,7 @@ const postMovies=async(body)=>{
                 err[key]=error.errors[key].message;
             })
             console.log(err);
-            return{err:err,statuscode:422};
+            return{err:err,statuscode:STATUS_CODES.UNPROCESSABLE_ENTITY};
         }else{
             throw error;
         }
@@ -56,7 +56,7 @@ const updateMovies=async(id,newdata)=>{
                 err[key] = error.errors[key].message;
             });
             console.log(err);
-            return {err: err, code: 422};
+            return {err: err, code: STATUS_CODES.UNPROCESSABLE_ENTITY};
         } else {
             throw error;
         }
@@ -72,7 +72,7 @@ const fetchMovies = async (filter) => {
     if(!movies) {
         return {
             err: 'Not able to find the queries movies',
-            statuscode: 404
+            statuscode: STATUS_CODES.NOT_FOUND
         }
     }
     return movies;
