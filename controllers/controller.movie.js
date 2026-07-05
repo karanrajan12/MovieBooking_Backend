@@ -1,7 +1,7 @@
 import movieservices from '../services/service.movie.js'
 import ERRresbody from "../utils/errorresponseBody.js";
 import SUCresbody from "../utils/successresponseBody.js";
-
+import {STATUS_CODES} from "../utils/utility.js";
 const postController=async(req,res)=>{
     const response=await movieservices.postMovies(req.body);
     if(response.err){
@@ -9,7 +9,7 @@ const postController=async(req,res)=>{
         res.status(response.statuscode).json(ERRresbody);
     }
     SUCresbody.data=response;
-    res.status(201).json(SUCresbody);
+    res.status(STATUS_CODES.CREATED).json(SUCresbody);
 }
 
 const getController=async(req,res)=>{
@@ -20,7 +20,7 @@ const getController=async(req,res)=>{
         return res.status(response.statuscode).json(ERRresbody);
     }
     SUCresbody.data=response;
-    return res.status(201).json(SUCresbody);
+    return res.status(STATUS_CODES.CREATED).json(SUCresbody);
 }
 
 const deleteController=async(req,res)=>{
@@ -31,7 +31,7 @@ const deleteController=async(req,res)=>{
         return res.status(response.statuscode).json(ERRresbody);
     }
     SUCresbody.data=response;
-    return res.status(201).json(SUCresbody);
+    return res.status(STATUS_CODES.CREATED).json(SUCresbody);
 }
 
 const updateController=async(req,res)=>{
@@ -43,11 +43,11 @@ const updateController=async(req,res)=>{
             return res.status(response.code).json(ERRresbody);
         }
         SUCresbody.data = response;
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     } catch (err) {
         console.log(err);
         ERRresbody.err = err;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 
@@ -59,11 +59,11 @@ const fetchController = async (req, res) => {
             return res.status(response.statuscode).json(ERRresbody);
         }
         SUCresbody.data = response;
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     } catch (error) {
         console.log(error);
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 

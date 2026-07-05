@@ -1,6 +1,7 @@
 import theatreService from '../services/service.theatre.js';
 import ERRresbody from "../utils/errorresponseBody.js";
 import SUCresbody from "../utils/successresponseBody.js";
+import {STATUS_CODES} from "../utils/utility.js";
 
 const postController=async(req,res)=>{
     try{
@@ -10,7 +11,7 @@ const postController=async(req,res)=>{
             res.status(response.statuscode).json(ERRresbody);
         }else{
             SUCresbody.data=response;
-            res.status(201).json(SUCresbody);
+            res.status(STATUS_CODES.CREATED).json(SUCresbody);
         }
     }catch(error){
         throw error;
@@ -26,7 +27,7 @@ const getController=async(req,res)=>{
             res.status(response.statuscode).json(ERRresbody);
         }else{
             SUCresbody.data=response;
-            res.status(201).json(SUCresbody);
+            res.status(STATUS_CODES.CREATED).json(SUCresbody);
         }
     }catch(error){
         console.log(error);
@@ -42,7 +43,7 @@ const putController=async(req,res)=>{
             res.status(response.statuscode).json(ERRresbody);
         }else{
             SUCresbody.data=response;
-            res.status(201).json(SUCresbody);
+            res.status(STATUS_CODES.CREATED).json(SUCresbody);
         }
     }catch(error){
         console.log(error);
@@ -54,10 +55,10 @@ const getAllTheatreController=async(req,res)=>{
     try{
         const response=await theatreService.getAllTheatres(req.query);
         SUCresbody.data=response;
-        res.status(201).json(SUCresbody);
+        res.status(STATUS_CODES.CREATED).json(SUCresbody);
     }catch(error){
         ERRresbody.error=error;
-        res.status(500).json(ERRresbody);
+        res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 
@@ -70,10 +71,10 @@ const deleteController = async (req, res) => {
         }
         SUCresbody.data = response;
         SUCresbody.message = "Successfully deleted the given theatre";
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     } catch (error) {
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 
@@ -86,11 +87,11 @@ const addMoviesinTheatreController=(async(req,res)=>{
         }
         SUCresbody.data = response;
         SUCresbody.message = "Successfully updated movies in the theatre";
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     }catch(error){
         console.log(error);
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 })
 const checkMovieController = async (req, res) => {
@@ -102,10 +103,10 @@ const checkMovieController = async (req, res) => {
         }
         SUCresbody.data = response;
         SUCresbody.message = "Successfully checked if movie is present in the theatre";
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     } catch (error) {
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 const updateMoviesController = async (req, res) => {
@@ -121,11 +122,11 @@ const updateMoviesController = async (req, res) => {
         }
         SUCresbody.data = response;
         SUCresbody.message = "Successfully updated movies in the theatre";
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     } catch (error) {
         console.log(error);
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 

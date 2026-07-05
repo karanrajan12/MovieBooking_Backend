@@ -3,19 +3,21 @@ import userServices from '../services/service.user.js';
 import ERRresbody from "../utils/errorresponseBody.js";
 import SUCresbody from "../utils/successresponseBody.js";
 import userModel from "../models/model.user.js";
+import {STATUS_CODES} from "../utils/utility.js";
+
 const signup=async (req,res)=>{
     try{
         const response=await userServices.createUser(req.body);
         SUCresbody.data=response;
         SUCresbody.message="Successfully Registered an User";
-        return res.status(201).json(SUCresbody);
+        return res.status(STATUS_CODES.CREATED).json(SUCresbody);
     }catch(err){
         if(err.err){
             ERRresbody.error=err.err;
             return res.status(err.code).json(ERRresbody);
         }
         ERRresbody.error=err;
-        res.status(500).json(ERRresbody);
+        res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 
@@ -38,7 +40,7 @@ const signin=async (req,res)=>{
             token: token
         };
         console.log(req.headers);
-        return res.status(200).json(SUCresbody);
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
     }catch(error){
         if(error.err) {
             ERRresbody.error = error.err;
@@ -47,7 +49,7 @@ const signin=async (req,res)=>{
         console.log(error);
 
         ERRresbody.err = error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 
@@ -58,21 +60,21 @@ const resetPassword=async(req,res)=>{
         if(!checkOldPassword){
             throw{
                 err:"Old Password is Wrong",
-                code:403
+                code:STATUS_CODES.FORBIDDEN
             }
         }
         response.password=req.body.newPassword;
         await response.save();
         SUCresbody.data=response;
         SUCresbody.message="Succesfully Updated the Password";
-        return res.status(201).json(SUCresbody);
+        return res.status(STATUS_CODES.CREATED).json(SUCresbody);
     }catch(error){
         if(error.err){
             ERRresbody.error=err;
             return res.status(error.code).json(ERRresbody);
         }
         ERRresbody.error=error;
-        return res.status(500).json(ERRresbody);
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
 export default {
