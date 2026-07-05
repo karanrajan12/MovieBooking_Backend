@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import movieRoutes from "./routes/route.movie.js";
 import theatreRoutes from "./routes/route.theatre.js";
 import authRoutes from './routes/route.auth.js';
+import userRoutes from "./routes/route.user.js";
 dotenv.config();
 
 const app=express();
@@ -27,6 +28,7 @@ dbConnect();
 movieRoutes(app);
 theatreRoutes(app);
 authRoutes(app);
+userRoutes(app);
 
 app.listen(port,()=>{
     console.log(fs.readFileSync('./banner.txt','utf-8'));

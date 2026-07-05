@@ -60,8 +60,43 @@ const getUserId=async (id)=>{
     }
 }
 
+const updateUserRoleStatus=async(data,userId)=>{
+    try{
+        let updatedQuery={};
+        if(data.userStatus){
+            updatedQuery.userStatus=data.userStatus;
+        };
+        if(data.userType){
+            updatedQuery.userType=data.userType;
+        };
+
+        const response=await userModel.findOneAndUpdate(
+            {_id:userId},
+            updatedQuery,
+            {new:true,runValidators:true}
+        );
+        if(!response){
+            throw{
+                err:"User not found for the given id",
+                code:404
+            }
+        }
+        return response;
+    }catch(error){
+        if(error.name==="ValidationError"){
+            throw {
+                err:"The Properties does not validate the constraints",
+                code:404
+            }
+        }
+        console.log(error);
+        throw error;
+    }
+}
+
 export default {
     createUser,
     checkUserEmail,
-    getUserId
+    getUserId,
+    updateUserRoleStatus
 };
