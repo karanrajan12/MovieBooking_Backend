@@ -20,3 +20,15 @@ export const STATUS_CODES = {
     FORBIDDEN:403,
     UNPROCESSABLE_ENTITY:422
 };
+
+export const BOOKING_STATUS={
+    inProcess:"IN_PROCESS",
+    cancelled:"CANCELLED",
+    successfull:"SUCCESSFULL"
+}
+
+export const PAYMENT_STATUS={
+    success:"SUCCESS",
+    pending:"PENDING",
+    cancelled:"CANCELLED"
+}
