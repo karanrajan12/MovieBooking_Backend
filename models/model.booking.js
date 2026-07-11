@@ -36,7 +36,7 @@ const bookingSchema=new mongoose.Schema(
                 values:[BOOKING_STATUS.cancelled,BOOKING_STATUS.inProcess,BOOKING_STATUS.successfull],
                 message:"Invalid Booking Status"
             },
-            default:BOOKING_STATUS.cancelled
+            default:BOOKING_STATUS.inProcess
         }
     },
     {timestamps:true}

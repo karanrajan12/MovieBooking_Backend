@@ -49,9 +49,7 @@ const checkAuthentication = async (req, res, next) => {
         );
 
         const user = await userServices.getUserId(response.id);
-
-        // ✅ Store user ID for next middleware
-        req.userId = user.id;
+        req.user = user.id;
 
         next();
 
