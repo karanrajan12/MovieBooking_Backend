@@ -1,5 +1,6 @@
-import {STATUS_CODES} from "../utils/utility.js";
+import {BOOKING_STATUS, STATUS_CODES, USER_STATUS, USER_TYPE} from "../utils/utility.js";
 import ERRresbody from "../utils/errorresponseBody.js";
+import userServices from "../services/service.user.js";
 import mongoose from 'mongoose';
 import theatreServices from "../services/service.theatre.js"
 const ObjectId=mongoose.Types.ObjectId;
@@ -41,4 +42,14 @@ const checkBookingCreateReq=async(req,res,next)=>{
     next();
 }
 
-export default {checkBookingCreateReq};
+const canStatusChange=async(req,res,next)=>{
+    const user=await userServices.getUserId(req.user);
+    if(user.userType===USER_TYPE.customer && req.body.status && req.body.status!=BOOKING_STATUS.cancelled){
+        ERRresbody.error="you are not allowed to change the booking status";
+        return res.status(STATUS_CODES.UNAUTHORISED).json(ERRresbody);
+    }
+    next();
+}
+export default {checkBookingCreateReq,
+    canStatusChange
+};

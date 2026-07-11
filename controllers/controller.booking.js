@@ -20,4 +20,22 @@ const create = async (req, res) => {
     }
 };
 
-export default {create}
+const update=async(req,res)=>{
+    try{
+        const response=await bookingServices.updateBooking(req.body,req.params.id);
+        console.log(response);
+        SUCresbody.data=response;
+        SUCresbody.message="Successfully Updated the Booking";
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
+    }catch(error){
+        if(error.err){
+            ERRresbody.error=err;
+            return res.status(error.err.code).json(ERRresbody);
+        }
+        ERRresbody.error=error;
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
+    }
+}
+export default {create,
+    update
+}

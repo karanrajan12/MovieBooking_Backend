@@ -7,6 +7,12 @@ const bookingRoutes=(app)=>{
         authMiddlewares.checkAuthentication,
         bookingMiddlewares.checkBookingCreateReq,
         bookingControllers.create
+    )
+    app.patch(
+        "/moviebooking/api/v1/booking/:id",
+        authMiddlewares.checkAuthentication,
+        bookingMiddlewares.canStatusChange,
+        bookingControllers.update
     );
 }
 
