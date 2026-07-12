@@ -27,6 +27,7 @@ const showRoutes=(app)=>{
         "/moviebooking/api/v1/shows/:id",
         authMiddlewares.checkAuthentication,
         authMiddlewares.isAdminOrClient,
+        showMiddlewares.validateShowUpdate,
         showControllers.updateShow
     );
 }
