@@ -20,6 +20,8 @@ const create = async (req, res) => {
     }
 };
 
+
+
 const update=async(req,res)=>{
     try{
         const response=await bookingServices.updateBooking(req.body,req.params.id);
@@ -36,6 +38,58 @@ const update=async(req,res)=>{
         return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
     }
 }
+const getBookings=async(req,res)=>{
+    try{
+        const response=await bookingServices.getBookings({userId:req.user});
+        SUCresbody.data=response;
+        SUCresbody.message="Succesfully fetched the Bookings";
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
+    }catch(err){
+        ERRresbody.error=err;
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
+    }
+}
+
+const getAllBookings=async(req,res)=>{
+    try{
+        const response=await bookingServices.getAllBookings();
+        SUCresbody.data=response;
+        SUCresbody.message="Succesfully fetched All of the Bookings";
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
+    }catch(err){
+        ERRresbody.error=err;
+        return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json(ERRresbody);
+    }
+}
+
+const getBookingById = async (req, res) => {
+    try {
+        const response = await bookingServices.getBoookingById(
+            req.params.id,
+            req.user
+        );
+
+        SUCresbody.data = response;
+        SUCresbody.message = "Successfully fetched the Booking";
+
+        return res.status(STATUS_CODES.OK).json(SUCresbody);
+
+    } catch (error) {
+
+        if (error.err) {
+            ERRresbody.error = error.err;
+            return res.status(error.code).json(ERRresbody);
+        }
+
+        ERRresbody.error = error;
+        return res
+            .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
+            .json(ERRresbody);
+    }
+};
 export default {create,
-    update
+    update,
+    getAllBookings,
+    getBookings,
+    getBookingById
 }

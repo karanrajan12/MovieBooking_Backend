@@ -14,6 +14,22 @@ const bookingRoutes=(app)=>{
         bookingMiddlewares.canStatusChange,
         bookingControllers.update
     );
+    app.get(
+        "/moviebooking/api/v1/booking",
+        authMiddlewares.checkAuthentication,
+        bookingControllers.getBookings
+    )
+    app.get(
+        "/moviebooking/api/v1/booking/all",
+        authMiddlewares.checkAuthentication,
+        authMiddlewares.isAdmin,
+        bookingControllers.getAllBookings
+    )
+    app.get(
+        "/moviebooking/api/v1/booking/:id",
+        authMiddlewares.checkAuthentication,
+        bookingControllers.getBookingById
+    );
 }
 
 export default bookingRoutes;

@@ -89,7 +89,7 @@ const validUpdateRequest=async(req,res,next)=>{
     next();
 }
 const isAdmin=async(req,res,next)=>{
-    const user=await userServices.getUserId(req.params.id);
+    const user=await userServices.getUserId(req.user);
     if(user.userType!=USER_TYPE.admin){
         ERRresbody.error="User is not an ADMIN - cannot proceed with the request";
         return res.status(STATUS_CODES.NOT_FOUND).json(ERRresbody);
