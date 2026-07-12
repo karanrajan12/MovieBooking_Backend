@@ -8,6 +8,7 @@ import theatreRoutes from "./routes/route.theatre.js";
 import authRoutes from './routes/route.auth.js';
 import userRoutes from "./routes/route.user.js";
 import bookingRoutes from "./routes/route.booking.js";
+import showRoutes from "./routes/route.show.js";
 dotenv.config();
 
 const app=express();
@@ -31,6 +32,7 @@ theatreRoutes(app);
 authRoutes(app);
 userRoutes(app);
 bookingRoutes(app);
+showRoutes(app);
 
 app.listen(port,()=>{
     console.log(fs.readFileSync('./banner.txt','utf-8'));

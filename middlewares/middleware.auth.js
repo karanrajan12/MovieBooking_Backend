@@ -38,18 +38,15 @@ const checkAuthentication = async (req, res, next) => {
 
         if (!token) {
             ERRresbody.error = "Token is Not Provided";
-            return res
-                .status(STATUS_CODES.FORBIDDEN)
-                .json(ERRresbody);
+            return res.status(STATUS_CODES.FORBIDDEN).json(ERRresbody);
         }
 
-        const response = jwt.verify(
-            token,
-            process.env.JWT_AUTH_KEY
-        );
+        const decoded = jwt.verify(token, process.env.JWT_AUTH_KEY);
 
-        const user = await userServices.getUserId(response.id);
-        req.user = user.id;
+        const user = await userServices.getUserId(decoded.id);
+
+        // Store the authenticated user
+        req.user = user;
 
         next();
 
@@ -57,24 +54,15 @@ const checkAuthentication = async (req, res, next) => {
 
         if (error.name === "JsonWebTokenError") {
             ERRresbody.error = error.message;
-
-            return res
-                .status(STATUS_CODES.UNAUTHORISED)
-                .json(ERRresbody);
+            return res.status(STATUS_CODES.UNAUTHORISED).json(ERRresbody);
         }
 
         if (error.code === STATUS_CODES.NOT_FOUND) {
-            ERRresbody.error =
-                "Token provided for a user that doesn't exist";
-
-            return res
-                .status(error.code)
-                .json(ERRresbody);
+            ERRresbody.error = "Token provided for a user that doesn't exist";
+            return res.status(error.code).json(ERRresbody);
         }
 
-        console.log(error);
         ERRresbody.error = error.message || error;
-
         return res
             .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
             .json(ERRresbody);
@@ -88,31 +76,32 @@ const validUpdateRequest=async(req,res,next)=>{
     }
     next();
 }
-const isAdmin=async(req,res,next)=>{
-    const user=await userServices.getUserId(req.user);
-    if(user.userType!=USER_TYPE.admin){
-        ERRresbody.error="User is not an ADMIN - cannot proceed with the request";
-        return res.status(STATUS_CODES.NOT_FOUND).json(ERRresbody);
-    }
-    next();
-}
+const isAdmin = async (req, res, next) => {
 
-const isClient=async(req,res,next)=>{
-    const user=await userServices.getUserId(req.userId);
-    if(user.userType!=USER_TYPE.client){
-        ERRresbody.error="User is not an CLIENT - cannot proceed with the request";
+    if (req.user.userType !== USER_TYPE.admin) {
+        ERRresbody.error = "User is not an ADMIN - cannot proceed with the request";
         return res.status(STATUS_CODES.UNAUTHORISED).json(ERRresbody);
     }
+
     next();
-}
+};
+
+const isClient = async (req, res, next) => {
+
+    if (req.user.userType !== USER_TYPE.client) {
+        ERRresbody.error = "User is not a CLIENT - cannot proceed with the request";
+        return res.status(STATUS_CODES.UNAUTHORISED).json(ERRresbody);
+    }
+
+    next();
+};
 
 const isAdminOrClient = async (req, res, next) => {
     try {
-        const user = await userServices.getUserId(req.userId);
 
         if (
-            user.userType !== USER_TYPE.admin &&
-            user.userType !== USER_TYPE.client
+            req.user.userType !== USER_TYPE.admin &&
+            req.user.userType !== USER_TYPE.client
         ) {
             ERRresbody.error =
                 "User is not an ADMIN or CLIENT - cannot proceed with the request";
@@ -125,10 +114,8 @@ const isAdminOrClient = async (req, res, next) => {
         next();
 
     } catch (error) {
-        console.log("ACTUAL ERROR:", error);
 
-        ERRresbody.error =
-            error.err || error.message || "Internal Server Error";
+        ERRresbody.error = error.err || error.message;
 
         return res
             .status(error.code || STATUS_CODES.INTERNAL_SERVER_ERROR)
