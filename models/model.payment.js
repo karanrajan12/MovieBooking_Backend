@@ -16,14 +16,14 @@ const paymentSchema=new mongoose.Schema(
             type:String,
             required:true,
             enum:{
-                value:[PAYMENT_STATUS.cancelled,PAYMENT_STATUS.pending,PAYMENT_STATUS.success],
-                message:"Invalid Payment    Status"
+                values:[PAYMENT_STATUS.cancelled,PAYMENT_STATUS.pending,PAYMENT_STATUS.success,PAYMENT_STATUS.failed],
+                message:"Invalid Payment Status"
             },
             default:PAYMENT_STATUS.pending
         }
     },{timestamps:true}
 );
 
-const payment=mongoose.model("Payments",paymentSchema);
+const paymentModel=mongoose.model("Payments",paymentSchema);
 
-export default payment;
+export default paymentModel;

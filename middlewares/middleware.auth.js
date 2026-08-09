@@ -45,7 +45,7 @@ const checkAuthentication = async (req, res, next) => {
 
         const user = await userServices.getUserId(decoded.id);
 
-        // Store the authenticated user
+
         req.user = user;
 
         next();
